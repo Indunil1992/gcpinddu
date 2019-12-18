@@ -9,7 +9,8 @@
         "isDirectory": true,
         "children": [
           "f2bd0bf2-bd0b-4521-9f81-a79eda846c1c",
-          "8b8bdd53-01fe-4740-9038-b4aca323031e"
+          "8b8bdd53-01fe-4740-9038-b4aca323031e",
+          "83a3c6c4-0803-4df6-a0c6-de6a38916709"
         ],
         "isRemovable": false,
         "filePath": "gcpinddu"
@@ -23,7 +24,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "gcpinddu/function.js",
-        "code": "let SL_GCP = require('slappforge-sdk-gcp');\nlet sqlConnMgr = require('./SqlConnMgr');\nconst sql = new SL_GCP.SQL(sqlConnMgr);\n\nexports.handler = function (request, response) {\n    // You must always end/destroy the DB connection after it's used.\n    sql.beginTransaction({\n        instanceIdentifier: 'indunilid'\n    }, function (error, connection) {\n        if (error) {\n            throw error;\n        }\n        connection.end();\n    });\nconnection.end();\n    response.send({ \"message\": \"Successfully executed\" });\n}",
+        "code": "let google = require('googleapis').google;\nlet _auth = require('./Authorizer');\nconst storage = google.storage('v1');\n\nexports.handler = function (request, response) {\n    storage.objects.list({\n        bucket: 'indunilstorge',\n        maxResults: 10,\n        prefix: ''\n    })\n        .then(response => {\n            console.log(response.data);           // successful response\n            /*\n    \n            WARNING: response.data.items will be missing altogether (instead of being empty) if there are no matches!  \n    \n            response.data = {\n                \"kind\": \"storage#objects\",\n                \"items\": [\n                    {\n                        \"kind\": \"storage#object\",\n                        \"id\": \"<bucket>/<object>/<timestamp>\",\n                        \"selfLink\": \"https://www.googleapis.com/storage/v1/b/<bucket>/o/<object>\",\n                        \"name\": \"<object>\",\n                        \"bucket\": \"<bucket>\",\n                        \"contentType\": \"<content-type>\",\n                        \"timeCreated\": \"<yyyy-MM-ddTHH:mm:ss.###Z>\",\n                        \"updated\": \"<yyyy-MM-ddTHH:mm:ss.###Z>\",\n                        \"size\": \"<bytes>\",\n                        \"md5Hash\": \"<hash>\",\n                        \"metadata\": {\n                            \"<key1>\": \"<val1>\",\n                            \"<key2>\": \"<val2>\"\n                        },\n                        \"crc32c\": \"<crc>\",\n                        \"etag\": \"<etag>\"\n                        // , ...\n                    }\n                    // , ...\n                ]\n            }\n            */\n        })\n        .catch(err => {\n            console.log(err, err.stack); // an error occurred\n        });\n\n    response.send({ \"message\": \"Successfully executed\" });\n}",
         "config": {
           "runtime": "nodejs8",
           "timeout": 60,
@@ -70,6 +71,17 @@
         "isRemovable": true,
         "filePath": "gcpinddu/SqlConnMgr.js",
         "code": "module.exports = function() {\n    this.dbConnections = [];\n\n    this.dbConnections[\"indunilid\"] = {\n        host: \"35.190.147.46\",\n        port: \"3306\",\n        user: \"root\",\n        password: process.env.Password_sqlindunilid,\n        database: \"information_schema\"\n    };\n};"
+      },
+      "83a3c6c4-0803-4df6-a0c6-de6a38916709": {
+        "id": "83a3c6c4-0803-4df6-a0c6-de6a38916709",
+        "parent": "77957aeb-dea7-46cc-b7e1-79004eac2124",
+        "name": "Authorizer.js",
+        "type": "JS_FILE",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "gcpinddu/Authorizer.js",
+        "code": "const google = require(\"googleapis\").google;\n\ngoogle.options({auth: new google.auth.Compute()});"
       }
     },
     "rootNode": "77957aeb-dea7-46cc-b7e1-79004eac2124",
@@ -83,18 +95,13 @@
         "type": "http-trigger",
         "config": {}
       },
-      "sqlindunilid": {
-        "name": "sqlindunilid",
-        "type": "CloudSQL",
+      "storageindunilstorge": {
+        "name": "storageindunilstorge",
+        "type": "CloudStorage",
         "config": {
-          "mode": 1,
-          "instance": {
-            "name": "indunilid",
-            "host": "35.190.147.46",
-            "port": 3306,
-            "user": "root",
-            "password": "sachithra142",
-            "database": "information_schema"
+          "mode": 0,
+          "bucket": {
+            "name": "indunilstorge"
           }
         }
       }
@@ -129,6 +136,13 @@
           "version": "0.0.1",
           "dev": false,
           "notRemovable": false
+        },
+        "googleapis": {
+          "name": "googleapis",
+          "language": "javascript",
+          "version": "29.0.0",
+          "dev": false,
+          "notRemovable": false
         }
       }
     }
@@ -142,7 +156,7 @@
     "platformRegions": {
       "AWS": "us-east-1"
     },
-    "lastSave": 1576646790878
+    "lastSave": 1576647513413
   },
   "VCS_STATE": {
     "provider": "GitHub",
