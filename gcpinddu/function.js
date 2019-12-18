@@ -45,5 +45,5 @@ exports.handler = function (request, response) {
             console.log(err, err.stack); // an error occurred
         });
 
-    response.send({ "message": "Successfully executed" });
+    response.send({ "message": "Successfully executed cld storge" });
 }
