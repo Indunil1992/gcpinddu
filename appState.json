@@ -1,0 +1,149 @@
+{
+  "EDITOR_STATE": {
+    "allProjectFiles": {
+      "77957aeb-dea7-46cc-b7e1-79004eac2124": {
+        "id": "77957aeb-dea7-46cc-b7e1-79004eac2124",
+        "parent": null,
+        "name": "gcpinddu",
+        "type": "DIRECTORY",
+        "isDirectory": true,
+        "children": [
+          "f2bd0bf2-bd0b-4521-9f81-a79eda846c1c",
+          "8b8bdd53-01fe-4740-9038-b4aca323031e"
+        ],
+        "isRemovable": false,
+        "filePath": "gcpinddu"
+      },
+      "f2bd0bf2-bd0b-4521-9f81-a79eda846c1c": {
+        "id": "f2bd0bf2-bd0b-4521-9f81-a79eda846c1c",
+        "parent": "77957aeb-dea7-46cc-b7e1-79004eac2124",
+        "name": "function.js",
+        "type": "JS_LAMBDA",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "gcpinddu/function.js",
+        "code": "let SL_GCP = require('slappforge-sdk-gcp');\nlet sqlConnMgr = require('./SqlConnMgr');\nconst sql = new SL_GCP.SQL(sqlConnMgr);\n\nexports.handler = function (request, response) {\n    // You must always end/destroy the DB connection after it's used.\n    sql.beginTransaction({\n        instanceIdentifier: 'indunilid'\n    }, function (error, connection) {\n        if (error) {\n            throw error;\n        }\n        connection.end();\n    });\n\n    response.send({ \"message\": \"Successfully executed\" });\n}",
+        "config": {
+          "runtime": "nodejs8",
+          "timeout": 60,
+          "memory": 128,
+          "triggerType": 0,
+          "handler": "handler"
+        },
+        "triggers": []
+      },
+      "10dafb69-d4f0-4b06-8542-7ead6f188e72": {
+        "id": "10dafb69-d4f0-4b06-8542-7ead6f188e72",
+        "parent": null,
+        "name": "index.js",
+        "type": "JS_FILE",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": false,
+        "filePath": "index.js",
+        "code": "// This file is used to register all your cloud functions in GCP.\n// DO NOT EDIT/DELETE THIS, UNLESS YOU KNOW WHAT YOU ARE DOING.\n\nexports.gcpinddufunction = require(\"./gcpinddu/function.js\").handler;"
+      },
+      "039b5684-72b7-4de6-957d-9095f15012cb": {
+        "id": "039b5684-72b7-4de6-957d-9095f15012cb",
+        "parent": null,
+        "name": "main.py",
+        "type": "PYTHON_FILE",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": false,
+        "filePath": "main.py",
+        "code": "# This file is used to register all your cloud functions in GCP.\n# DO NOT EDIT/DELETE THIS, UNLESS YOU KNOW WHAT YOU ARE DOING.\n\n"
+      },
+      "8b8bdd53-01fe-4740-9038-b4aca323031e": {
+        "id": "8b8bdd53-01fe-4740-9038-b4aca323031e",
+        "parent": "77957aeb-dea7-46cc-b7e1-79004eac2124",
+        "name": "SqlConnMgr.js",
+        "type": "JS_FILE",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "gcpinddu/SqlConnMgr.js",
+        "code": "module.exports = function() {\n    this.dbConnections = [];\n\n    this.dbConnections[\"indunilid\"] = {\n        host: \"35.190.147.46\",\n        port: \"3306\",\n        user: \"mysql.sys\",\n        password: process.env.Password_sqlindunilid,\n        database: \"information_schema\"\n    };\n};"
+      }
+    },
+    "rootNode": "77957aeb-dea7-46cc-b7e1-79004eac2124",
+    "openFiles": [
+      "f2bd0bf2-bd0b-4521-9f81-a79eda846c1c"
+    ],
+    "currentFileId": "f2bd0bf2-bd0b-4521-9f81-a79eda846c1c",
+    "resources": {
+      "http-trigger": {
+        "name": "http-trigger",
+        "type": "http-trigger",
+        "config": {}
+      },
+      "sqlindunilid": {
+        "name": "sqlindunilid",
+        "type": "CloudSQL",
+        "config": {
+          "mode": 1,
+          "instance": {
+            "name": "indunilid",
+            "host": "35.190.147.46",
+            "port": 3306,
+            "user": "mysql.sys",
+            "password": "sachithra142",
+            "database": "information_schema"
+          }
+        }
+      }
+    },
+    "customTemplate": {
+      "dialect": null,
+      "definitions": null
+    },
+    "envVariables": [
+      {
+        "lambdaId": "all",
+        "varKey": "AWS_REGION",
+        "varValue": null,
+        "shouldPersist": false,
+        "displayOnly": false,
+        "editable": false
+      },
+      {
+        "lambdaId": "f2bd0bf2-bd0b-4521-9f81-a79eda846c1c",
+        "varKey": "Password_sqlindunilid",
+        "varValue": null,
+        "shouldPersist": false,
+        "displayOnly": false,
+        "editable": true
+      }
+    ],
+    "packageJSON": {
+      "dependencies": {
+        "slappforge-sdk-gcp": {
+          "name": "slappforge-sdk-gcp",
+          "language": "javascript",
+          "version": "0.0.1",
+          "dev": false,
+          "notRemovable": false
+        }
+      }
+    }
+  },
+  "PROJECT_META": {
+    "projectName": "gcpinddu",
+    "projectDescription": "",
+    "projectVersion": "1.0.0",
+    "projectRegion": "us-east1",
+    "platform": "GCP",
+    "platformRegions": {
+      "AWS": "us-east-1"
+    },
+    "lastSave": 1576646605493
+  },
+  "VCS_STATE": {
+    "provider": "GitHub",
+    "repo": {
+      "name": "gcpinddu",
+      "url": "https://github.com/Indunil1992/gcpinddu"
+    }
+  }
+}
