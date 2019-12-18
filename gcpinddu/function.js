@@ -12,6 +12,6 @@ exports.handler = function (request, response) {
         }
         connection.end();
     });
-
+connection.end();
     response.send({ "message": "Successfully executed" });
 }

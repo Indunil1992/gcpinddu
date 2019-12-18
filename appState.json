@@ -23,7 +23,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "gcpinddu/function.js",
-        "code": "let SL_GCP = require('slappforge-sdk-gcp');\nlet sqlConnMgr = require('./SqlConnMgr');\nconst sql = new SL_GCP.SQL(sqlConnMgr);\n\nexports.handler = function (request, response) {\n    // You must always end/destroy the DB connection after it's used.\n    sql.beginTransaction({\n        instanceIdentifier: 'indunilid'\n    }, function (error, connection) {\n        if (error) {\n            throw error;\n        }\n        connection.end();\n    });\n\n    response.send({ \"message\": \"Successfully executed\" });\n}",
+        "code": "let SL_GCP = require('slappforge-sdk-gcp');\nlet sqlConnMgr = require('./SqlConnMgr');\nconst sql = new SL_GCP.SQL(sqlConnMgr);\n\nexports.handler = function (request, response) {\n    // You must always end/destroy the DB connection after it's used.\n    sql.beginTransaction({\n        instanceIdentifier: 'indunilid'\n    }, function (error, connection) {\n        if (error) {\n            throw error;\n        }\n        connection.end();\n    });\nconnection.end();\n    response.send({ \"message\": \"Successfully executed\" });\n}",
         "config": {
           "runtime": "nodejs8",
           "timeout": 60,
@@ -31,7 +31,12 @@
           "triggerType": 0,
           "handler": "handler"
         },
-        "triggers": []
+        "triggers": [
+          {
+            "resourceName": "http-trigger",
+            "config": {}
+          }
+        ]
       },
       "10dafb69-d4f0-4b06-8542-7ead6f188e72": {
         "id": "10dafb69-d4f0-4b06-8542-7ead6f188e72",
@@ -64,7 +69,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "gcpinddu/SqlConnMgr.js",
-        "code": "module.exports = function() {\n    this.dbConnections = [];\n\n    this.dbConnections[\"indunilid\"] = {\n        host: \"35.190.147.46\",\n        port: \"3306\",\n        user: \"mysql.sys\",\n        password: process.env.Password_sqlindunilid,\n        database: \"information_schema\"\n    };\n};"
+        "code": "module.exports = function() {\n    this.dbConnections = [];\n\n    this.dbConnections[\"indunilid\"] = {\n        host: \"35.190.147.46\",\n        port: \"3306\",\n        user: \"root\",\n        password: process.env.Password_sqlindunilid,\n        database: \"information_schema\"\n    };\n};"
       }
     },
     "rootNode": "77957aeb-dea7-46cc-b7e1-79004eac2124",
@@ -87,7 +92,7 @@
             "name": "indunilid",
             "host": "35.190.147.46",
             "port": 3306,
-            "user": "mysql.sys",
+            "user": "root",
             "password": "sachithra142",
             "database": "information_schema"
           }
@@ -137,7 +142,7 @@
     "platformRegions": {
       "AWS": "us-east-1"
     },
-    "lastSave": 1576646605493
+    "lastSave": 1576646790878
   },
   "VCS_STATE": {
     "provider": "GitHub",
